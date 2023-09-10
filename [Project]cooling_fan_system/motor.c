@@ -1,8 +1,5 @@
 ﻿#include <avr/io.h>
 #include <util/delay.h>
-#include <avr/interrupt.h>
-#include "LCD.h"
-#include "BTN_LED_VAR_ADC.h"
 
 #define EnableMotor1()			PORTE &= ~0x04
 #define DisableMotor1()			PORTE |= 0x04

@@ -23,15 +23,6 @@
 // E 신호의 비트 번호 정의
 #define LCD_E    2
 
-volatile int run_state;			// 현재 LED의 상태
-volatile int rot_state;
-volatile int tim_state;
-
-int time_index;
-int time_mindex;
-char time_min[20];
-char time_sec[20];
-
 // 텍스트 LCD로 부터 상태(명령)를 읽는 함수
 unsigned char LCD_rCommand(void){
 	unsigned char temp=1;
@@ -132,47 +123,6 @@ void LCD_wData(char dat){
 void LCD_wString(char *str){
 	while(*str)
 	LCD_wData(*str++);
-}
-
-void timer(int* tim_state)
-{
-   if (*tim_state)
-   {
-      *tim_state = 0;
-      time_index = 180;
-   }
-   
-   if (time_index != -1)
-   {
-      time_mindex = time_index / 60;
-      time_sindex = time_index % 60;
-      
-      LCD_wBCommand(0x80 | 0x40);
-      LCD_wString("LEFT TIME");
-      
-      LCD_wBCommand(0x80 | 0x4A);
-      sprintf(time_min, "%2d", time_mindex);
-      LCD_wString(time_min);
-      
-      LCD_wBCommand(0x80 | 0x4C);
-      LCD_wString(":");
-      
-      LCD_wBCommand(0x80 | 0x4D);
-      sprintf(time_sec, "%2d", time_sindex);
-      LCD_wString(time_sec);
-      
-      if (time_index > 0)
-      {
-         time_index--;
-         _delay_ms(1000);
-         if (time_index == 0)
-         {
-            time_index = -1;
-            run_state = 0;
-            rot_state = 0;
-         }
-      }
-   }
 }
 
 #endif /* LCD_H_ */

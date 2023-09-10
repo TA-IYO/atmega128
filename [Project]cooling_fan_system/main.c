@@ -1,25 +1,21 @@
 #define F_CPU 16000000UL
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <stdio.h>
 #include <util/delay.h>
+#include <stdio.h>
 #include "UART0.h"
 #include "motor.h"
-#include "BTN_LED_VAR_ADC.h"
+#include "interrupt.h"
+#include "adc.h"
 #include "LCD.h"
+#include "timer.h"
 
 volatile int run_state = 0;
 volatile int rot_state = 0;
 volatile int tim_state = 0;
 
 int read;
-char buff[20];
 int rot_cnt = 0;
-int time_index = -1;
-int time_mindex;
-int time_sindex;
-char time_sec[20];
-char time_min[20];
 
 #define mask_adc 11110001
 
@@ -68,7 +64,7 @@ int main(void)
             
             LCD_Init();
             LCD_wBCommand(0x80 | 0x00);
-            LCD_wString("Waiting for");
+            LCD_wString("Waiting to");
             LCD_wBCommand(0x80 | 0x40);
             LCD_wString("START");
          }
@@ -78,19 +74,17 @@ int main(void)
       
       PORTB = (PORTB | 0x01);
 
-      if(rot_state)
-         PORTB = (PORTB | 0x10);
-      else
-         PORTB = (PORTB & 0xEF);
+      PORTB = rot_status(rot_state);
 
       read = read_ADC();
+      fan_activator(read);
+
       LCD_Init();
       LCD_wBCommand(0x80 | 0x00);
       LCD_wString("FAN LEVEL : ");
       LCD_wBCommand(0x80 | 0x0A);
       
-      fan_status(read);
-      fan_activator(read);
+      PORTB = fan_status(read, rot_state);
       timer(&tim_state);
       rotator(rot_state, rot_cnt);
    }
