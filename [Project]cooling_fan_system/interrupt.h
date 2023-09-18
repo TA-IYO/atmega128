@@ -1,4 +1,4 @@
-﻿#define interrupt_H_
+#define interrupt_H_
 #ifndef interrupt_H_
 
 void INIT_PORT(void);
