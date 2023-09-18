@@ -1,4 +1,6 @@
-﻿#include <avr/io.h>
+
+#define F_CPU 16000000UL
+#include <avr/io.h>
 #include <util/delay.h>
 
 #define EnableMotor1()			PORTE &= ~0x04
