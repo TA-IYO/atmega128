@@ -1,4 +1,4 @@
-﻿#ifndef LCD_H_
+#ifndef LCD_H_
 #define LCD_H_
 
 unsigned char LCD_rCommand(void);
@@ -10,5 +10,7 @@ void LCD_Init(void);
 void LCD_wData(char dat);
 void LCD_wString(char *str);
 void timer(int* tim_state);
+void LCD_IDLE(void);
+void LCD_RUN(void);
 
 #endif /* LCD_H_ */
