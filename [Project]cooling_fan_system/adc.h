@@ -5,4 +5,3 @@ void ADC_init(unsigned char channel);
 int read_ADC(void);
 
 #endif
-
