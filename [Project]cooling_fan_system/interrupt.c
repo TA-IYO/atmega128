@@ -1,6 +1,11 @@
-﻿#include <avr/io.h>
+#define F_CPU 16000000UL
+#include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+
+int run_state;
+int rot_state;
+int tim_state;
 
 ISR(INT0_vect)
 {
@@ -47,4 +52,3 @@ void INIT_INT2(void)
 	EICRA |= (1 << ISC21);			// 하강 에지에서 인터럽트 발생
 	sei();							// 전역적으로 인터럽트 허용
 }
-
