@@ -1,4 +1,5 @@
-﻿#ifndef LCD_H_
+
+#ifndef LCD_H_
 #define LCD_H_
 #define F_CPU 16000000UL
 #include <avr/io.h>
@@ -63,10 +64,7 @@ void LCD_wCommand(char cmd){
 	
 	_delay_us(1);
 }
-void LCD_setcursor(char col, char row)
-{
-	LCD_wBCommand(0x80 | col * 0x40 + row);
-}
+
 // 텍스트 LCD에 명령을 출력하는 함수 - 단, 비지플래그 체크함
 void LCD_wBCommand(char cmd){
 	while(LCD_BusyCheck(LCD_rCommand()))
@@ -80,6 +78,11 @@ void LCD_wBCommand(char cmd){
 	cbi(LCD_CON, LCD_E);  // 명령 쓰기 동작 끝
 	
 	_delay_us(1);
+}
+
+void LCD_setcursor(char col, char row)
+{
+	LCD_wBCommand(0x80 | ((col * 0x40) + row));
 }
 
 // 텍스트 LCD를 초기화하는 함수
@@ -123,6 +126,22 @@ void LCD_wData(char dat){
 void LCD_wString(char *str){
 	while(*str)
 	LCD_wData(*str++);
+}
+
+void LCD_IDLE(void)
+{
+	LCD_Init();
+	LCD_wBCommand(0x80 | 0x00);
+	LCD_wString("Waiting to");
+	LCD_wBCommand(0x80 | 0x40);
+	LCD_wString("START");
+}
+
+void LCD_RUN(void)
+{
+	LCD_Init();
+	LCD_wBCommand(0x80 | 0x00);
+	LCD_wString("FAN LEVEL : ");
 }
 
 #endif /* LCD_H_ */
