@@ -1,3 +1,6 @@
+#define F_CPU 16000000UL
+#include <stdio.h>
+#include <util/delay.h>
 #include "LCD.h"
 
 int time_index = -1;
@@ -6,16 +9,16 @@ int time_sindex;
 char time_min[20];
 char time_sec[20];
 
-volatile int run_state;	
-volatile int rot_state;
-volatile int tim_state;
+int run_state;	
+int rot_state;
+int tim_state;
 
 void timer(int* tim_state)
 {
    if (*tim_state)
    {
       *tim_state = 0;
-      time_index = 180;
+      time_index = 15;
    }
    
    if (time_index != -1)
